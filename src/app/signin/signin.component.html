@@ -1,0 +1,17 @@
+<div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mx-auto">
+  <form class="form-signin" [formGroup]="form" (ngSubmit)="onLogin()">
+    <img class="mb-4 mx-auto" src="/assets/Logo.png" alt="" width="72"
+      height="72">
+    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+    <div class="alert alert-danger" *ngIf="!(auth$ | async)?.isLoading && (auth$ | async)?.errorMessage !== ''" role="alert">
+      {{ (auth$ | async)?.errorMessage }}
+    </div>
+    <label for="inputUsername" class="sr-only">Username</label>
+    <input type="email" formControlName="username" id="inputUsername" class="form-control form-control-sm" placeholder="Username" required autofocus />
+    <label for="inputPassword" class="sr-only mt-3">Password</label>
+    <input type="password" formControlName="password" id="inputPassword" class="form-control form-control-sm" placeholder="Password"/>
+    <button class="btn btn-lg btn-primary btn-block mt-3 btn-sm" [disabled]="form?.invalid" type="submit">
+      {{ (auth$ | async)?.isLoading ? 'Loading ...' : 'Sign in' }}
+    </button>
+  </form>
+</div>
