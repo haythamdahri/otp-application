@@ -1,1 +1,43 @@
-<p>home works!</p>
+<div class="col-12">
+    <h1 class="text-primary fw-bold text-center">OTP Operations</h1>
+    <div class="col-12 mx-auto text-center">
+        <a routerLink="/otp/save">
+            <button class="btn btn-primary btn-block">
+                <i class="bi bi-file-earmark-plus"></i> New operations
+            </button>
+        </a>
+    </div>
+    <div class="col-9 mx-auto mt-4">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Operation Date</th>
+                    <th>Last Update Date</th>
+                    <th>Transaction Number</th>
+                    <th>Attempts</th>
+                    <th>State</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let otp of (otp$ | async)?.otpPage?.content">
+                    <th scope="row">{{otp?.timestamp}}</th>
+                    <td>{{otp?.updateTimestamp}}</td>
+                    <td>{{otp?.transactionNumber}}</td>
+                    <td>{{otp?.attempts}}</td>
+                    <td>{{otp?.state}}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm fw-bold">
+                            <i class="bi bi-archive"></i> Delete
+                        </button>
+                    </td>
+                </tr>
+                <tr *ngIf="(otp$ | async)?.isLoading">
+                    <td colspan="6" class="text-center">
+                        <i class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

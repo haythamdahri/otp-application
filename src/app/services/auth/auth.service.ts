@@ -23,11 +23,7 @@ export class AuthService {
           // Decode token
           const user = this.decodeToken(response?.token);
           // Store token in local storage
-          localStorage.setItem('token', JSON.stringify(user?.token));
-          localStorage.setItem(
-            'tokenExpiration',
-            JSON.stringify(user?.expiration)
-          );
+          localStorage.setItem('user', JSON.stringify(user));
           // Return user
           return user;
         }),
@@ -38,22 +34,27 @@ export class AuthService {
       );
   }
 
+  getUser(): User {
+    return JSON.parse(localStorage.getItem('user') || '{}');
+  }
+
+  getToken(): string {
+    return this.getUser()?.token!;
+  }
+
   isAuthenticated() {
-    const token = localStorage.getItem('token');
-    const tokenExpiration = localStorage.getItem('tokenExpiration');
+    const user: User = this.getUser();
     return (
-      token != null &&
-      token != '' &&
-      tokenExpiration != null &&
-      tokenExpiration != '' &&
-      new Date(Number(tokenExpiration)) > new Date()
+      user?.token != null &&
+      user?.token != '' &&
+      user?.expiration != null &&
+      new Date(Number(user?.expiration)) > new Date()
     );
   }
 
   signOut() {
     // Remove local storage items
-    localStorage.removeItem('token');
-    localStorage.removeItem('tokenExpiration');
+    localStorage.removeItem('user');
   }
 
   // Decode token

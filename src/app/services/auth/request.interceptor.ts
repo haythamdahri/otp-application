@@ -16,26 +16,19 @@ import { first, map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class RequestInterceptor implements HttpInterceptor {
-  constructor(private store: Store<{ auth: AuthState }>) {}
+  constructor(private authService: AuthService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): any {
     // Retrieve connected user info
-    this.store.select('auth').pipe(
-      first(),
-      map((authState: AuthState) => {
-        if (
-          authState?.isAuthenticated &&
-          authState?.user?.token &&
-          authState?.user?.token !== ''
-        )
-          req = req.clone({
-            setHeaders: {
-              Authorization: authState?.user?.token,
-            },
-          });
-        // Forward request handling
-        return next.handle(req);
-      })
-    );
+    if (this.authService.isAuthenticated()) {
+      req = req.clone({
+        setHeaders: {
+          Authorization: this.authService.getToken()
+        },
+      });
+      console.log(req.headers);
+    }
+    // Forward request handling
+    return next.handle(req);
   }
 }

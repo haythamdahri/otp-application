@@ -1,5 +1,5 @@
 <!-- NAVBAR -->
-<app-navbar></app-navbar>
+<app-navbar *ngIf="(auth$ | async)?.isAuthenticated"></app-navbar>
 
 <!-- DYNAMIC ROUTING -->
 <router-outlet></router-outlet>

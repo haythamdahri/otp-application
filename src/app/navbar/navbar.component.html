@@ -10,19 +10,15 @@
     </button>
     <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" aria-current="page" routerLink='/' routerLinkActive="'active'"
-          routerLinkOptions="{exact: true}">Home</a>
+        <li class="nav-item" routerLinkActive="'active'">
+          <a class="nav-link" aria-current="page" routerLink='/'
+          routerLinkActiveOptions="{exact: true}"><i class="bi bi-house-door"></i> Home</a>
         </li>
-        <li class="nav-item" *ngIf="!(auth$ | async)?.isAuthenticated">
-          <a class="nav-link" aria-current="page" routerLink='/signin' routerLinkActive="'active'"
-            routerLinkOptions="{exact: true}">Sign In</a>
-        </li>
-        <li class="nav-item" *ngIf="(auth$ | async)?.isAuthenticated">
-          <a class="nav-link">{{ (auth$ | async)?.user?.username }}</a>
+        <li class="nav-item" routerLinkActive="'active'" *ngIf="(auth$ | async)?.isAuthenticated">
+          <a class="nav-link"><i class="bi bi-person-circle"></i> {{ (auth$ | async)?.user?.username }}</a>
         </li>
         <li class="nav-item" *ngIf="(auth$ | async)?.isAuthenticated">
-          <a class="nav-link" aria-current="page" style="cursor: pointer;" (click)="onSignOut()">Sign Out</a>
+          <a class="nav-link" aria-current="page" style="cursor: pointer;" (click)="onSignOut()"><i class="bi bi-box-arrow-right"></i> Sign out</a>
         </li>
       </ul>
     </div>

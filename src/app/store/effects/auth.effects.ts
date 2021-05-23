@@ -18,13 +18,11 @@ export class AuthEffects {
     this.actions$.pipe(
       ofType(authActions.loginUser),
       exhaustMap((action) => {
-        console.log(action);
         return this.authService
           .signIn({ username: action.username, password: action.password })
           .pipe(
             map((user) => authActions.loginUserSuccess({ user })),
             catchError((error: Error) => {
-              console.log('Error: ' + error);
               return of(
                 authActions.loginUserFailure({
                   errorMessage: 'Username or password is incorrect',

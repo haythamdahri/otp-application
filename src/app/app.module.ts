@@ -13,6 +13,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './store/effects/auth.effects';
+import { OtpEffects } from './store/effects/otp.effects';
 import { RequestInterceptor } from './services/auth/request.interceptor';
 
 @NgModule({
@@ -29,9 +30,14 @@ import { RequestInterceptor } from './services/auth/request.interceptor';
     HttpClientModule,
     StoreModule.forRoot(reducers, { metaReducers }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    EffectsModule.forRoot([AuthEffects])
+    EffectsModule.forRoot([AuthEffects, OtpEffects])
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: RequestInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })
