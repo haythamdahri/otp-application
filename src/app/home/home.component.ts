@@ -4,7 +4,10 @@ import { Store } from '@ngrx/store';
 import { Observable, of, Subscription } from 'rxjs';
 import { OtpState } from '../store/reducers/otp.reducer';
 import * as otpActions from '../store/actions/otp.actions';
-import { subscribeOn, take } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
+import { CustomPaginationService } from '../pagination/services/custom-pagination.service';
+import { Pageable } from '../pagination/pageable';
+declare var bootbox: any;
 
 @Component({
   selector: 'app-home',
@@ -17,7 +20,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private titleService: Title,
-    private store: Store<{ otp: OtpState }>
+    private store: Store<{ otp: OtpState }>,
+    private paginationService: CustomPaginationService
   ) {
     this.otp$ = store.select('otp');
   }
@@ -33,11 +37,60 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.getUserOtpOperations();
   }
 
-  getUserOtpOperations() {
-    this.otpSubscription = this.store.select('otp').pipe(take(1)).subscribe((otpState) => {
-      if( !otpState?.isLoaded ) {
-        this.store.dispatch(otpActions.getUserOtpOperations());
-      }
+  getNextPage(): void {
+    this.otpSubscription = this.otp$?.pipe(take(1)).subscribe((otp) => {
+      const pageable: Pageable = this.paginationService.getNextPage(
+        otp.otpPage
+      );
+      // Update Page
+      this.store.dispatch(otpActions.updateOtpOperationsPage(pageable));
     });
+  }
+
+  getPreviousPage(): void {
+    this.otpSubscription = this.otp$?.pipe(take(1)).subscribe((otp) => {
+      const pageable: Pageable = this.paginationService.getPreviousPage(
+        otp.otpPage
+      );
+      // Update Page
+      this.store.dispatch(otpActions.updateOtpOperationsPage(pageable));
+    });
+  }
+
+  getPageInNewSize(pageSize: number): void {
+    this.otpSubscription = this.otp$?.pipe(take(1)).subscribe((otp) => {
+      const pageable: Pageable = this.paginationService.getPageInNewSize(
+        otp.otpPage,
+        pageSize
+      );
+      // Update Page
+      this.store.dispatch(otpActions.updateOtpOperationsPage(pageable));
+    });
+  }
+
+  async getUserOtpOperations() {
+    this.otpSubscription = this.otp$?.pipe(take(1)).subscribe(
+      (otpState) => {
+        // Do Loaded Check
+        if (otpState?.isLoaded) {
+          this.store.dispatch(
+            otpActions.getUserOtpOperations(otpState?.otpPage?.pageable)
+          );
+        }
+      }
+    );
+  }
+
+  onOtpDelete(id: number) {
+    // User Confirmation
+    bootbox.confirm(
+      'Would you like to delete this OTP operation permanently?',
+      (result: any) => {
+        if (result) {
+          // Dispatch action
+          this.store.dispatch(otpActions.deleteOtpOperation({ id }));
+        }
+      }
+    );
   }
 }

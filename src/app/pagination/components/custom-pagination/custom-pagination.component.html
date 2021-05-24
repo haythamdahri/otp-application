@@ -1,0 +1,26 @@
+<div *ngIf="page" class="card-actions align-items-center d-flex justify-content-center">
+    <span class="align-self-center mb-1 mx-1 text-muted">Elements per page:</span>
+    <div class="dropdown">
+      <button class="btn btn-light dropdown-toggle" [ngClass]="{'disabled': loading}" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+        {{page.size}}
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+        <li><a class="dropdown-item" style="cursor: pointer;" [ngClass]="{'active': page.size === 5}" (click)="updatePageSize(5)">5</a></li>
+        <li><a class="dropdown-item" style="cursor: pointer;" [ngClass]="{'active': page.size === 20}" (click)="updatePageSize(20)">20</a></li>
+        <li><a class="dropdown-item" style="cursor: pointer;" [ngClass]="{'active': page.size === 100}" (click)="updatePageSize(100)">100</a></li>
+      </ul>
+    </div>
+    <span class="align-self-center mb-1 mr-2 text-muted">
+      Shows {{page.numberOfElements}} of {{page.totalElements}}
+    </span>
+    <a [routerLink]=""
+      class="btn btn-outline" [ngClass]="{'disabled': page.first || loading }"
+      (click)="previousPage()">
+      <i class="fas fa-angle-left"></i>
+    </a>
+    <a [routerLink]=""
+      class="btn btn-outline" [ngClass]="{'disabled': page.last || loading }"
+      (click)="nextPage()">
+      <i class="fas fa-angle-right"></i>
+    </a>
+  </div>

@@ -26,7 +26,6 @@ export class RequestInterceptor implements HttpInterceptor {
           Authorization: this.authService.getToken()
         },
       });
-      console.log(req.headers);
     }
     // Forward request handling
     return next.handle(req);

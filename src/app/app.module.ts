@@ -15,13 +15,15 @@ import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './store/effects/auth.effects';
 import { OtpEffects } from './store/effects/otp.effects';
 import { RequestInterceptor } from './services/auth/request.interceptor';
+import { CustomPaginationComponent } from './pagination/components/custom-pagination/custom-pagination.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     SigninComponent,
-    HomeComponent
+    HomeComponent,
+    CustomPaginationComponent
   ],
   imports: [
     BrowserModule,
