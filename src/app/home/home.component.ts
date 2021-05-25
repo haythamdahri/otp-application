@@ -17,6 +17,7 @@ declare var bootbox: any;
 export class HomeComponent implements OnInit, OnDestroy {
   otp$?: Observable<OtpState>;
   private otpSubscription?: Subscription;
+  search: string = '';
 
   constructor(
     private titleService: Title,
@@ -68,17 +69,19 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  async getUserOtpOperations() {
-    this.otpSubscription = this.otp$?.pipe(take(1)).subscribe(
-      (otpState) => {
-        // Do Loaded Check
-        if (otpState?.isLoaded) {
-          this.store.dispatch(
-            otpActions.getUserOtpOperations(otpState?.otpPage?.pageable)
-          );
-        }
+  async getUserOtpOperations(byPassLoadedCheck: boolean = false) {
+    this.otpSubscription = this.otp$?.pipe(take(1)).subscribe((otpState) => {
+      // Do Loaded Check
+      if (!byPassLoadedCheck || otpState?.isLoaded) {
+        // Get copy of pageable
+        const pageable: Pageable = JSON.parse(
+          JSON.stringify(otpState?.otpPage?.pageable)
+        );
+        // Update search
+        pageable.search = this.search;
+        this.store.dispatch(otpActions.getUserOtpOperations(pageable));
       }
-    );
+    });
   }
 
   onOtpDelete(id: number) {
@@ -92,5 +95,10 @@ export class HomeComponent implements OnInit, OnDestroy {
         }
       }
     );
+  }
+
+  onSearch() {
+    // Dispatch search
+    this.getUserOtpOperations(true);
   }
 }

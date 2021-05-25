@@ -8,6 +8,15 @@
         </a>
     </div>
 
+    <div class="col-9 mx-auto text-center mt-4">
+        <form class="d-flex" (ngSubmit)="onSearch()">
+            <input class="form-control me-2 form-control-sm" name="search" [(ngModel)]="search" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">
+                <i class="bi bi-search"></i>
+            </button>
+        </form>
+    </div>
+
     <div class="col-9 mx-auto mt-4">
         <hr class="my-no w-100" />
         <app-custom-pagination [page]="(otp$ | async)?.otpPage" [loading]="(otp$ | async)?.isLoading"

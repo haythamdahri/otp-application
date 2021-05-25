@@ -7,6 +7,7 @@ export class Pageable {
   public offset?: number;
   public unpaged?: boolean;
   public paged?: boolean;
+  public search?: string;
 
   static readonly DEFAULT_PAGE_SIZE = 20;
   static readonly FIRST_PAGE_NUMBER = 0;

@@ -39,6 +39,11 @@ export class OtpEffects {
       exhaustMap((action) => {
         return this.otpService.deleteOtpOperation(action?.id).pipe(
           map(() => {
+            // Success operation
+            bootbox.alert({
+              message: "OTP Operation has been deleted successfully",
+              backdrop: true
+          });
             // Fetch operations
             return otpActions.getUserOtpOperations(new Pageable());
           }),

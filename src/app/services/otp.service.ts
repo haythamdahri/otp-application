@@ -15,9 +15,15 @@ export class OtpService {
   constructor(private http: HttpClient) {}
 
   getOtpOperations(pageable: Pageable): Observable<Page<Otp>> {
-    const params: Params = new HttpParams().append('page', pageable?.pageNumber).append('size', pageable?.pageSize);
+    const params: Params = new HttpParams()
+      .append('page', pageable?.pageNumber)
+      .append('size', pageable?.pageSize)
+      .append('search', pageable?.search!);
     return this.http
-      .get<Page<Otp>>(`${environment.otpApi}/api/v1/otp/currentuser/operations`, {params})
+      .get<Page<Otp>>(
+        `${environment.otpApi}/api/v1/otp/currentuser/operations`,
+        { params }
+      )
       .pipe(
         retry(5),
         catchError((error) => {
