@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { OtpRequest } from 'src/app/models/otp-request';
+import { OtpCheckRequest } from 'src/app/models/otp-check-request';
 import { Otp } from 'src/app/models/otp';
 import { Pageable } from 'src/app/pagination/pageable';
 import { Page } from 'src/app/pagination/page';
@@ -32,6 +33,11 @@ export const updateOtpOperationsPage = createAction(
 export const createOtpOperation = createAction(
   '[OTP] Create OTP Operation',
   props<OtpRequest>()
+);
+
+export const checkOtpOperation = createAction(
+  '[OTP] Check OTP Operation',
+  props<OtpCheckRequest>()
 );
 
 export const createOtpOperationSuccess = createAction(

@@ -70,9 +70,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   async getUserOtpOperations(byPassLoadedCheck: boolean = false) {
+    const fetchCheckDate: Date = new Date();
+    const now: Date = new Date();
+    (fetchCheckDate).setMinutes(now.getMinutes() - 30);
     this.otpSubscription = this.otp$?.pipe(take(1)).subscribe((otpState) => {
       // Do Loaded Check
-      if (!byPassLoadedCheck || otpState?.isLoaded) {
+      if (byPassLoadedCheck || !otpState?.isLoaded || fetchCheckDate >= otpState?.lastFetch! || otpState?.otpPage?.content?.length === 0 ) {
         // Get copy of pageable
         const pageable: Pageable = JSON.parse(
           JSON.stringify(otpState?.otpPage?.pageable)

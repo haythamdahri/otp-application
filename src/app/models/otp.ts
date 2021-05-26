@@ -5,4 +5,5 @@ export class Otp {
     public attempts?: Number;
     public transactionNumber?: string;
     public state?: string;
+    public code?: string;
 }

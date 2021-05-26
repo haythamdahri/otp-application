@@ -16,6 +16,7 @@ import { AuthEffects } from './store/effects/auth.effects';
 import { OtpEffects } from './store/effects/otp.effects';
 import { RequestInterceptor } from './services/auth/request.interceptor';
 import { CustomPaginationComponent } from './pagination/components/custom-pagination/custom-pagination.component';
+import { OtpFormComponent } from './otp-form/otp-form.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { CustomPaginationComponent } from './pagination/components/custom-pagina
     NavbarComponent,
     SigninComponent,
     HomeComponent,
-    CustomPaginationComponent
+    CustomPaginationComponent,
+    OtpFormComponent
   ],
   imports: [
     BrowserModule,

@@ -10,7 +10,8 @@
 
     <div class="col-9 mx-auto text-center mt-4">
         <form class="d-flex" (ngSubmit)="onSearch()">
-            <input class="form-control me-2 form-control-sm" name="search" [(ngModel)]="search" type="search" placeholder="Search" aria-label="Search">
+            <input class="form-control me-2 form-control-sm" name="search" [(ngModel)]="search" type="search"
+                placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success" type="submit">
                 <i class="bi bi-search"></i>
             </button>
@@ -25,7 +26,7 @@
         </app-custom-pagination>
     </div>
 
-    <div class="col-9 mx-auto mt-4">
+    <div class="col-9 mx-auto mt-4 mb-5">
         <table class="table table-striped table-hover">
             <thead class="table-dark">
                 <tr>
@@ -40,15 +41,19 @@
             <tbody>
                 <ng-container *ngIf="!(otp$ | async)?.isLoading">
                     <tr *ngFor="let otp of (otp$ | async)?.otpPage?.content">
-                        <th scope="row">{{otp?.timestamp}}</th>
-                        <td>{{otp?.updateTimestamp}}</td>
+                        <th scope="row">{{otp?.timestamp | date: 'medium'}}</th>
+                        <td>{{otp?.updateTimestamp | date: 'medium'}}</td>
                         <td>{{otp?.transactionNumber}}</td>
                         <td>{{otp?.attempts}}</td>
                         <td>{{otp?.state}}</td>
                         <td>
-                            <button class="btn btn-danger btn-sm fw-bold" (click)="onOtpDelete(otp?.id)">
+                            <button class="btn btn-danger btn-sm fw-bold mr-5" (click)="onOtpDelete(otp?.id)">
                                 <i class="bi bi-archive"></i> Delete
                             </button>
+                            <a *ngIf="otp?.state === 'SENT'" [routerLink]="['otp', 'save', otp?.id]">
+                                <button class="btn btn-dark btn-sm fw-bold">
+                                    <i class="bi bi-bag-check-fill"></i> Verify
+                                </button></a>
                         </td>
                     </tr>
                     <tr *ngIf="(otp$ | async)?.otpPage?.content?.length === 0">

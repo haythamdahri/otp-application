@@ -11,13 +11,17 @@ export interface OtpState {
   isLoaded: boolean,
   otpPage: Page<Otp>,
   errorMessage: string,
+  lastFetch: Date | null,
+  invalidCode: boolean
 }
 
 export const initialState: OtpState = {
   isLoading: false,
   isLoaded: false,
   otpPage: new Page<Otp>(),
-  errorMessage: ''
+  errorMessage: '',
+  lastFetch: null,
+  invalidCode: false
 };
 
 export const otpReducer = createReducer(
@@ -26,7 +30,7 @@ export const otpReducer = createReducer(
     {...state, isLoading: true, errorMessage: ''}
   )),
   on(otpActions.getUserOtpOperationsSuccess, (state, otpPage) => (
-    {...state, isLoading: false, otpPage, errorMessage: '', isLoaded: true}
+    {...state, isLoading: false, otpPage, errorMessage: '', isLoaded: true, lastFetch: new Date()}
   )),
   on(otpActions.getUserOtpOperationsFailure, (state, {errorMessage}) => (
     {...state, isLoading: false, otpPage: new Page<Otp>(), errorMessage}
