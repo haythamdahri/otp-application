@@ -18,14 +18,19 @@
     <!-- ERROR WHILE LOADING OTP OPERATION FOR CHECK OR STATE DISPLAY -->
     <div class="col-9 mx-auto text-center mt-4" *ngIf="!isLoading && isError">
         <div class="alert alert-danger" role="alert">
-            <i class="bi bi-info-square-fill"></i> An error occurred, please try again!
-            <button class="btn btn-light btn-sm" (click)="getOtp()"><i class="bi bi-arrow-clockwise"></i>
-                Reload</button>
+            <i class="bi bi-info-square-fill"></i>
+            <span *ngIf="notFoundOtp"> No OTP Operation Found </span>
+            <span *ngIf="!notFoundOtp"> An error occurred, please try again!
+                <button class="btn btn-light btn-sm" (click)="getOtp()"><i class="bi bi-arrow-clockwise"></i>
+                    Reload
+                </button>
+            </span>
         </div>
     </div>
 
     <!-- ERROR MESSAGE FOR NON BLOCKED OTP -->
-    <div class="col-9 mx-auto text-center mt-4" *ngIf="!isLoading && isInvalidOtpCode && otp?.id && otp?.state !== 'SENT'">
+    <div class="col-9 mx-auto text-center mt-4"
+        *ngIf="!isLoading && isInvalidOtpCode && otp?.id && otp?.state !== 'SENT'">
         <div class="alert alert-danger" role="alert">
             <i class="bi bi-info-square-fill"></i> {{ invalidOtpCodeMessage }}
         </div>
@@ -39,7 +44,8 @@
     </div>
 
     <!-- UNCHEABLE OTP STATE -->
-    <div class="col-9 mx-auto text-center mt-4" *ngIf="!isLoading && !isInvalidOtpCode && !isError && otp?.id && otp?.state !== 'SENT'">
+    <div class="col-9 mx-auto text-center mt-4"
+        *ngIf="!isLoading && !isInvalidOtpCode && !isError && otp?.id && otp?.state !== 'SENT'">
         <div class="alert" [ngClass]="{'alert-danger': !(otp?.state === 'VERIFIED' || otp?.state === 'ALREADY_VERIFIED'),
     'alert-success': (otp?.state === 'VERIFIED' || otp?.state === 'ALREADY_VERIFIED')}" role="alert">
             <i class="bi bi-info-square-fill"></i> OTP operation is {{otp?.state}}
@@ -70,9 +76,8 @@
             <div class="mb-3">
                 <label for="transactioNumber" class="form-label">Transaction Number</label>
                 <input type="text" name="transactionNumber" [value]="otpRequest?.transactionNumber"
-                    [(ngModel)]="otpRequest.transactionNumber"
-                    class="form-control form-control-sm" id="transactioNumber" aria-describedby="transactionNumber"
-                    placeholder="784512548XXXXXX" />
+                    [(ngModel)]="otpRequest.transactionNumber" class="form-control form-control-sm"
+                    id="transactioNumber" aria-describedby="transactionNumber" placeholder="784512548XXXXXX" />
                 <div id="emailHelp" class="form-text">Transaction Number.</div>
             </div>
             <select class="form-select form-select-sm" [(ngModel)]="otpRequest.channel" name="channel"
@@ -83,13 +88,13 @@
             </select>
             <div *ngIf="otpRequest?.channel === 'EMAIL'" class="mb-3 mt-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="text" name="email" [(ngModel)]="otpRequest.email"
-                    class="form-control form-control-sm" id="email" placeholder="myemail.me@mailing.xx" />
+                <input type="text" name="email" [(ngModel)]="otpRequest.email" class="form-control form-control-sm"
+                    id="email" placeholder="myemail.me@mailing.xx" />
             </div>
             <div *ngIf="otpRequest?.channel === 'SMS'" class="mb-3 mt-3">
                 <label for="phone" class="form-label">Phone</label>
-                <input type="number" name="phone" [(ngModel)]="otpRequest.phone"
-                    class="form-control form-control-sm" id="phone" placeholder="+2126XXXXXXXX" />
+                <input type="number" name="phone" [(ngModel)]="otpRequest.phone" class="form-control form-control-sm"
+                    id="phone" placeholder="+2126XXXXXXXX" />
             </div>
             <button type="submit" [disabled]="isLoading || !isValidForm()" class="btn btn-primary btn-sm mt-3"><i
                     class="bi bi-chat-square-quote-fill"></i> Send</button>

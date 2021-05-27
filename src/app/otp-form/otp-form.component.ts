@@ -27,6 +27,7 @@ export class OtpFormComponent implements OnInit, OnDestroy {
   isLoading: boolean = true;
   isError: boolean = false;
   isInvalidOtpCode: boolean = false;
+  notFoundOtp: boolean = false;
   invalidOtpCodeMessage: string = '';
   transactionNumberAlreadyTaken: boolean = false;
 
@@ -78,9 +79,11 @@ export class OtpFormComponent implements OnInit, OnDestroy {
             this.otp = otp;
             this.isLoading = false;
           },
-          (error) => {
+          (error: HttpErrorResponse) => {
             this.isError = true;
             this.isLoading = false;
+            // Check if does not exists
+            this.notFoundOtp = error?.error?.statusCode === 404 ? true : false
           }
         );
       return;
@@ -93,9 +96,11 @@ export class OtpFormComponent implements OnInit, OnDestroy {
           this.otp = otp;
           this.isLoading = false;
         },
-        (error) => {
+        (error: HttpErrorResponse) => {
           this.isError = true;
           this.isLoading = false;
+          // Check if does not exists
+          this.notFoundOtp = error?.error?.statusCode === 404 ? true : false
         }
       );
   }

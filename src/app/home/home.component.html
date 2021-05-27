@@ -47,13 +47,19 @@
                         <td>{{otp?.attempts}}</td>
                         <td>{{otp?.state}}</td>
                         <td>
-                            <button class="btn btn-danger btn-sm fw-bold mr-5" (click)="onOtpDelete(otp?.id)">
-                                <i class="bi bi-archive"></i> Delete
-                            </button>
-                            <a *ngIf="otp?.state === 'SENT'" [routerLink]="['otp', 'save', otp?.id]">
-                                <button class="btn btn-dark btn-sm fw-bold">
-                                    <i class="bi bi-bag-check-fill"></i> Verify
-                                </button></a>
+                            <div class="row">
+                                <div class="col">
+                                    <button class="btn btn-danger btn-sm fw-bold mr-5" (click)="onOtpDelete(otp?.id)">
+                                        <i class="bi bi-archive"></i> Delete
+                                    </button>
+                                </div>
+                                <div class="col" *ngIf="otp?.state === 'SENT'">
+                                    <a [routerLink]="['otp', 'save', otp?.id]">
+                                        <button class="btn btn-dark btn-sm fw-bold">
+                                            <i class="bi bi-bag-check-fill"></i> Verify
+                                        </button></a>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                     <tr *ngIf="(otp$ | async)?.otpPage?.content?.length === 0">
