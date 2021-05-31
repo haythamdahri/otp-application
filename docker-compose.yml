@@ -1,0 +1,54 @@
+version: "3.7"
+
+services:
+  # ============================
+  # DATABASE SERVER
+  # ============================
+  mysql-server:
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      - "MYSQL_DATABASE=otp"
+      - "MYSQL_ROOT_PASSWORD=toortoor"
+    networks: 
+      - otp-network
+
+  # ============================
+  # OTP FRONTEND APPLICATION
+  # ============================
+  otp-frontend-application:
+    image: applications/otp-application:0.1
+    ports:
+      - "80:80"
+    environment: 
+      - "OTP_MICROSERVICE=otp-service"
+      - "OTP_MICROSERVICE_PORT=8080"
+      - "BACKEND_API_URI=backend"
+    networks: 
+      - otp-network
+    command: sh /etc/nginx/run_nginx.sh
+      
+  # ============================
+  # BACKEND SERVICE
+  # ============================
+  otp-service:
+    image: microservices/otp-microservice:0.1
+    restart: unless-stopped
+    environment:
+      # =========================
+      # SERVER PORT
+      # =========================
+      - "SERVER_PORT=8080"
+      # =========================
+      # DATABASE CONFIG
+      # =========================
+      - "SPRING_DATASOURCE_URL=jdbc:mysql://mysql-server:3306/otp?useSSL=false&allowPublicKeyRetrieval=true"
+      - "SPRING_DATASOURCE_USERNAME=root"
+      - "SPRING_DATASOURCE_PASSWORD=toortoor"
+      - "ORG_TECHNOLOGIA_ALLOWEDORIGINS=http://otp-frontend-application"
+    networks: 
+      - otp-network
+
+networks: 
+  otp-network: {}  

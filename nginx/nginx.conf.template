@@ -1,0 +1,45 @@
+worker_processes auto;
+events {
+    worker_connections 8000;
+    multi_accept on;
+}
+
+http {
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+    log_format compression '${DOLLAR}remote_addr - ${DOLLAR}remote_user [${DOLLAR}time_local] '
+         '"${DOLLAR}request" ${DOLLAR}status ${DOLLAR}upstream_addr '
+         '"${DOLLAR}http_referer" "${DOLLAR}http_user_agent"';
+    server {
+        listen       80;
+        server_name  localhost;
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+
+        #charset koi8-r;
+        #access_log  /var/log/nginx/log/host.access.log  main;
+
+        location /${BACKEND_API_URI} {
+            rewrite ^/${BACKEND_API_URI}/(.*) /$1  break;
+            proxy_pass http://${OTP_MICROSERVICE}:${OTP_MICROSERVICE_PORT};
+            proxy_redirect     off;
+            proxy_set_header   Host ${DOLLAR}host;
+            proxy_set_header   X-Real-IP ${DOLLAR}remote_addr;
+            proxy_set_header   X-Forwarded-For ${DOLLAR}proxy_add_x_forwarded_for;
+            proxy_set_header   X-Forwarded-Host ${DOLLAR}server_name;
+        }
+
+        location / {
+            try_files ${DOLLAR}uri ${DOLLAR}uri/ /index.html;
+        }
+
+        #error_page  404              /404.html;
+
+        # redirect server error pages to the static page /50x.html
+        #
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   /usr/share/nginx/html;
+        }
+    }
+}
